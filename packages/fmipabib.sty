@@ -1,0 +1,117 @@
+% fmipabib.sty
+% Paket Bibliografi Khusus FMIPA UGM
+% Berdasarkan Panduan Penulisan 2019/2020
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{fmipabib}[2026/02/05 v1.0 FMIPA UGM Bibliography Style]
+
+% --- 1. LOAD PAKET BIBLATEX ---
+% Menggunakan style 'ext-authoryear' untuk fleksibilitas format judul
+% \RequirePackage{csquotes} % Disarankan oleh biblatex
+% \RequirePackage[english,indonesian]{babel} % language
+\RequirePackage[
+    backend=biber,
+    style=ext-authoryear, % Sistem Harvard (Nama-Tahun)
+    maxcitenames=2,       % Di teks: max 2 nama. Jika >2 jadi et al
+    mincitenames=1,
+    maxbibnames=99,       % Di Daftar Pustaka: Tulis SEMUA nama (Dilarang et al.
+    giveninits=true,      % Nama depan disingkat jadi inisial (Ross, S.L.)
+    uniquename=init,      % Gunakan inisial untuk membedakan nama yang sama
+    dashed=false,         % Jangan ganti nama pengarang berulang dengan garis
+    sorting=nyt,          % Urutan: Name, Year, Title
+    date=year,            % Hanya tampilkan tahun
+    urldate=long,         % Format tanggal akses panjang
+    isbn=false,           % Tidak perlu menampilkan ISBN
+    doi=false             % Tidak perlu menampilkan DOI
+]{biblatex}
+
+% --- 2. PENGATURAN BAHASA & ISTILAH ---
+
+% Format "et al." harus miring
+\DefineBibliographyStrings{english}{%
+    andothers = {\mkbibemph{et\addabbrvspace al\adddot}}%
+}
+% \DefineBibliographyStrings{indonesian}{%
+%     andothers = {\mkbibemph{et\addabbrvspace al\adddot}}%
+% }
+% % Mengganti "and" menjadi "dan" (jika bahasa dokumen Indonesia)
+% \DefineBibliographyStrings{indonesian}{%
+%     and = {dan}%
+% }
+
+% --- 3. FORMAT DAFTAR PUSTAKA ---
+
+% A. Spasi: Tunggal di dalam item, 1.5 antar item
+\setlength{\bibitemsep}{0.5\baselineskip} % Jarak antar item (tambah 0.5 dari single)
+\AtBeginBibliography{\singlespacing}      % Paksa spasi tunggal di dalam item
+
+% B. Format Nama: Nama Belakang, Inisial. 
+\DeclareNameAlias{sortname}{family-given}
+\DeclareNameAlias{default}{family-given}
+\DeclareNameAlias{author}{family-given}
+
+% C. Tanda Baca
+% Gunakan koma sebagai pemisah antar elemen, bukan titik 
+\renewcommand*{\newunitpunct}{\addcomma\space}
+
+% D. Format Judul & Tipe Dokumen (Huruf Miring/Tegak)
+
+% 1. Buku: Judul Miring [Sumber: 456]
+\DeclareFieldFormat[book]{title}{\mkbibemph{#1}}
+\DeclareFieldFormat[mvbook]{title}{\mkbibemph{#1}}
+
+% 2. Artikel Jurnal: Nama Jurnal Miring, Judul Artikel Tegak 
+\DeclareFieldFormat[article]{journaltitle}{\mkbibemph{#1}}
+\DeclareFieldFormat[article]{title}{#1} % Tegak, tanpa kutip
+
+% 3. Prosiding: Judul Prosiding Miring [Sumber: 465]
+\DeclareFieldFormat[inproceedings]{booktitle}{\mkbibemph{#1}}
+\DeclareFieldFormat[inproceedings]{title}{#1}
+
+% 4. Skripsi/Tesis/Disertasi: Tipe dokumen Miring (misal: *Skripsi*) 
+% Panduan F.2: "Judul skripsi, Skripsi/Tesis/Disertasi (harus ditulis miring)"
+\DeclareFieldFormat[thesis]{title}{#1}       % Judul tegak
+\DeclareFieldFormat[thesis]{type}{\mkbibemph{#1}} % Tipe miring
+
+% 5. Artikel dalam Buku: Judul Artikel Miring & Judul Buku Miring 
+% INI UNIK: Biasanya judul artikel dikutip ("..."), tapi Panduan FMIPA minta MIRING.
+\DeclareFieldFormat[incollection]{title}{\mkbibemph{#1}}
+\DeclareFieldFormat[incollection]{booktitle}{\mkbibemph{#1}}
+
+% 6. Internet: URL Miring 
+\DeclareFieldFormat{url}{\mkbibemph{#1}}
+\DeclareFieldFormat{urldate}{diakses tanggal #1}
+
+% 7. Laporan Penelitian: Nama Laporan Miring
+\DeclareFieldFormat[report]{type}{\mkbibemph{#1}}
+\DeclareFieldFormat[report]{title}{#1}
+
+% --- 4. MAKRO PENYUSUNAN ELEMEN ---
+
+% Menghapus "In:"
+\renewbibmacro*{in:}{}
+
+% Format URL: URL (miring), diakses tanggal...
+\renewbibmacro*{url+urldate}{%
+    \printfield{url}%
+    \setunit*{\addcomma\space}%
+    \printurldate}
+
+% Mengatur urutan Jurnal: Vol, No, Halaman
+% Panduan minta: nama majalah, nomor, volume dan halaman.
+\renewbibmacro*{journal+issuetitle}{%
+    \usebibmacro{journal}%
+    \setunit*{\addcomma\space}%
+    \iffieldundef{series}
+    {}
+    {\newunit
+        \printfield{series}%
+        \setunit{\addcomma\space}}%
+    \printfield{number}%
+    \setunit*{\addcomma\space}%
+    \printfield{volume}%
+    \setunit{\addcomma\space}%
+    \printfield{eid}%
+    \newunit}
+
+\endinput
