@@ -104,7 +104,7 @@
 \iftoggle{lang}{
     % define new commands in bahasa
     \newcommand{\listappendixname}{DAFTAR LAMPIRAN}%
-    \newcommand{\nomenclaturename}{DAFTAR SINGKATAN}%
+    \newcommand{\nomenclaturename}{DAFTAR LAMBANG DAN SINGKATAN}%
     \newcommand{\acknowledgmentname}{HALAMAN PERSEMBAHAN}%
     \newcommand{\approvalpage}{HALAMAN PENGESAHAN}
     \newcommand{\statementname}{PERNYATAAN BEBAS PLAGIASI}
@@ -556,21 +556,69 @@
 }
 
 %======================================
-%% Abstract
+%% Intisari (Indonesian Abstract)
 %======================================
-\newcommand{\chapterabstract}[1]{
-    \chapter*{ABSTRACT}
-    \input{#1}
-    \addcontentsline{toc}{chapter}{ABSTRACT}
+\newcommand{\chapterintisari}[1]{
+    \clearpage
+    \phantomsection
+    \addcontentsline{toc}{chapter}{INTISARI}
+    \thispagestyle{plain} % Menampilkan nomor halaman (biasanya romawi)
+
+    \begin{center}
+        % Judul Halaman
+        {\fontsize{14pt}{16pt}\selectfont\bfseries INTISARI}\par
+        \vspace{1em}
+
+        % Judul Tesis (Indonesia)
+        {\fontsize{12pt}{14pt}\selectfont\bfseries\MakeUppercase{\@titleind}}\par
+        \vspace{1em}
+
+        % Identitas Penulis
+        {\normalfont Oleh}\par
+        \vspace{0.5em}
+        {\normalfont \@authorName}\par
+        {\normalfont \@authorID}\par
+        \vspace{1.5em}
+    \end{center}
+
+    % Isi Intisari
+    \begin{singlespace}
+        \input{#1}
+    \end{singlespace}
 }
 
 %======================================
-%% Intisari
+%% Abstract (English Abstract)
 %======================================
-\newcommand{\chapterintisari}[1]{
-    \chapter*{INTISARI}
-    \input{#1}
-    \addcontentsline{toc}{chapter}{INTISARI}
+\newcommand{\chapterabstract}[1]{
+    \clearpage
+    \phantomsection
+    \addcontentsline{toc}{chapter}{ABSTRACT}
+    \thispagestyle{plain}
+
+    \begin{center}
+        % Page Title
+        {\fontsize{14pt}{16pt}\selectfont\bfseries ABSTRACT}\par
+        \vspace{1em}
+
+        % Thesis Title (English) 
+        {\fontsize{12pt}{14pt}\selectfont\bfseries\MakeUppercase{\@titleeng}}\par
+        \vspace{1em}
+
+        % Author Identity
+        {\normalfont By}\par
+        \vspace{0.5em}
+        {\normalfont \@authorName}\par
+        {\normalfont \@authorID}\par
+        \vspace{1.5em}
+    \end{center}
+
+    % Content (English hyphenation & Single space)
+    \begin{singlespace}
+        \selectlanguage{english}
+        \input{#1}
+        \selectlanguage{bahasa} % Kembalikan ke bahasa indonesia setelah selesai
+    \end{singlespace}
 }
 
 %======================================
