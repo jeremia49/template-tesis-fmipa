@@ -84,6 +84,7 @@
 \usepackage{forloop}
 \usepackage{longtable}
 \usepackage{enumitem}
+\usepackage{tabularx}
 \usepackage[labelsep=period]{caption} % use period as label separator
 \usepackage[bookmarks=true,hidelinks,bookmarksnumbered]{hyperref}
 \usepackage{tikz}
@@ -405,7 +406,7 @@
         %\chapter*{\approvalpage}
         \addtocounter{page}{1}
         \addcontentsline{toc}{chapter}{\approvalpage}
-        \includepdf[page={1}]{contents/endorsement/endorsement.pdf}
+        \includepdf[page={1}]{contents/endorsement/endorsement-proposal.pdf}
         \addtocounter{page}{-1}
     }
     \newcommand{\printendorsement}{
@@ -414,65 +415,63 @@
         \fancyfoot[C]{\thepage}
         \begin{center}
             \begin{singlespacing}
-                \textbf{\iftoggle{lang}{TESIS}{THESIS}}\\
+                \MakeUppercase{\normalfont\large\textbf{Halaman Pengesahan Usulan Penelitian S2}}\\
                 \vspace{1em}
-                \MakeUppercase{\bfseries\fontsize{14pt}{16pt}\selectfont\@titleind}\\
-                \vspace{0.5cm}
-                \iftoggle{lang}{Dipersiapkan dan disusun oleh}{Written by}\\
-                \vspace{1em}
-                \textbf{\underline{\@authorName} \\ \@authorID \\}
-                \vspace{1em}
-                \iftoggle{lang}
-                {Telah dipertahankan di depan dewan penguji}
-                {Has been presented} \\
-                \iftoggle{lang}
-                {Pada tanggal: \@examdate}
-                {on \@examdate}\\
-                \vspace{1em}
-                \iftoggle{lang}
-                {\textbf{Susunan Dewan Penguji}}
-                {\textbf{Thesis Examiners}}\\
-
+                \begin{flushleft}
+                    \begin{tabularx}{\linewidth}{p{3.5cm} c X}
+                        Judul Tesis & : & \@titleind \\
+                    \end{tabularx}
+                \end{flushleft}
                 \begin{center}
-                    \begin{tabular}{ccc}
-                        \iftoggle{lang}{Pembimbing I}{Supervisor I}   & \hspace{2cm}   & \iftoggle{lang}{Anggota Dewan Penguji Lain}{Examiners} \\
-                        \vspace{0.3cm}                                & \vspace{0.3cm} & \vspace{0.3cm}                                         \\
-                        \textbf{\underline{\getsupervisor{1}{1}}}     &                &
-                        \textbf{\underline{\getexaminer{1}{1}}}                                                                                 \\
-                        \iftoggle{lang}{Pembimbing II}{Supervisor II} & \hspace{2cm}   &                                                        \\
-                        \vspace{0.3cm}                                & \vspace{0.3cm} & \vspace{0.3cm}                                         \\
-                        \textbf{\underline{\getsupervisor{2}{1}}}     &                &
-                        \textbf{\underline{\getexaminer{2}{1}}}                                                                                 \\
-                    \end{tabular}
+                    \begin{singlespace}
+
+                        \textbf{Diusulkan oleh}\par
+
+                    \end{singlespace}
+                \end{center}
+                \begin{flushleft}
+                    \begin{tabularx}{\linewidth}{p{3.5cm} c X}
+                        Nama Mahasiswa & : & \@authorName \\
+                        NIM            & : & \@authorID   \\
+                    \end{tabularx}
+                \end{flushleft}
+                \begin{center}
+                    \begin{singlespace}
+
+                        \vspace{\dimexpr 12pt * 150 / 100\relax}
+
+                        Telah disetujui\\
+                        \vspace{12pt}
+
+                        pada tanggal \@examdate\\
+
+                        \vspace{\dimexpr 12pt * 2 * 150 / 100\relax}
+
+                        Pembimbing\\
+
+                        \vspace{\dimexpr 12pt * 3 * 150 / 100\relax}
+
+                        \getsupervisor{1}{1}\\
+                        Pembimbing I
+
+                        \ifdefempty{\@secondsupervisor}
+                        {
+                        }
+                        {
+                            \vspace{\dimexpr 12pt * 3 * 150 / 100\relax}
+
+                            \getsupervisor{2}{1} \\
+                            Pembimbing II
+                        }
+
+                    \end{singlespace}
                 \end{center}
                 \vspace{0.5cm}
 
-                \iftoggle{lang}
-                {Tesis ini telah diterima sebagai salah satu persyaratan \\ untuk memperoleh gelar Magister}
-                {This thesis has been accepted as a partial fulfillment \\ for the degree of Master}\\
-                \vspace{0.3cm}
-
-                \iftoggle{lang}{Tanggal:}{Date: $\ldots\ldots$} \\
-                \iftoggle{lang}
-                {Pengelola Program Studi \@program}
-                {Program Coordinator of \@program}\\
-                \vspace{1.3cm}
-                \textbf{\underline{\@programcoorName}}\\
-                NIP. \@programcoorNIP \\
-                \vspace{0.5cm}
-
-                \iftoggle{lang}{Mengetahui,\\}{}
-                \iftoggle{lang}
-                {Ketua Departemen/Wakil Penanggung Jawab Program Studi}
-                {Head of Department}\\
-                \iftoggle{lang}{\@departmentIna}{\@departmentEng}\\
-                \vspace{1.3cm}
-                \textbf{\underline{\@depheadName}}\\
-                NIP. \@depheadNIP \\
-
             \end{singlespacing}
         \end{center}
-        \addcontentsline{toc}{chapter}{\approvalpage}
+        \phantomsection
+        \addcontentsline{toc}{chapter}{HALAMAN PENGESAHAN USULAN PENELITIAN S2}
     }
 }
 
@@ -495,20 +494,26 @@
 %% Dedication Page
 %======================================
 \newcommand{\chapterdedication}[1]{
-    \newgeometry{top=2.54cm,bottom=2.54cm,left=3.54cm,right=2.54cm}
-    \chapter*{\dedicationpage}%
-    \input{#1}
-    \addcontentsline{toc}{chapter}{\dedicationpage}
+    \iftoggle{proposaltesis}{
+        % tidak ada halaman persembahan untuk proposal
+    }{\newgeometry{top=2.54cm,bottom=2.54cm,left=3.54cm,right=2.54cm}
+        \chapter*{\dedicationpage}%
+        \input{#1}
+        \addcontentsline{toc}{chapter}{\dedicationpage}}
+
 }
 
 %======================================
 %% Statement Page
 %======================================
 \newcommand{\chapterstatement}[1]{
-    \newgeometry{right=2.54cm,left=3.54cm,top=2.54cm,bottom=2.54cm}
-    \chapter*{\statementname}%
-    \input{#1}
-    \addcontentsline{toc}{chapter}{\statementname}
+    \iftoggle{proposaltesis}{
+        % tidak ada halaman pernyataan untuk proposal
+    }{\newgeometry{right=2.54cm,left=3.54cm,top=2.54cm,bottom=2.54cm}
+        \chapter*{\statementname}%
+        \input{#1}
+        \addcontentsline{toc}{chapter}{\statementname}}
+
 }
 
 %======================================
@@ -530,10 +535,15 @@
 %% Preface
 %======================================
 \newcommand{\chapterpreface}[1]{
-    \restoregeometry% Restore Geometry
-    \chapter*{\prefacename}%
-    \input{#1}
-    \addcontentsline{toc}{chapter}{\prefacename}
+    \iftoggle{proposaltesis}{
+        % tidak ada kata pengantar untuk proposal
+    }{
+        \restoregeometry% Restore Geometry
+        \chapter*{\prefacename}%
+        \input{#1}
+        \addcontentsline{toc}{chapter}{\prefacename}
+    }
+
 }
 
 %======================================
